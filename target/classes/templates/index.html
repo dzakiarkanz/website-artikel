@@ -3,27 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Arkan Tech | Portal Artikel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title th:text="${webName} + ' | Portal Artikel'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+          crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-      rel="stylesheet" 
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
-      crossorigin="anonymous">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark topbar" style="background-color: #1e1e24;">
     <div class="container">
-        <a class="navbar-brand fw-bold" href="#">Arkan Tech | Portal Artikel</a>
+        <a class="navbar-brand fw-bold" th:href="@{/}" th:text="${webName}">Portal</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3 fw-semibold text-uppercase small">
-                <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Tech</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Tutorials</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">AI & Dev</a></li>
@@ -60,9 +59,9 @@
                             <p class="card-text text-muted flex-grow-1 small" th:text="${article.excerpt}">Ringkasan artikel.</p>
                             <div class="meta mb-3 small text-secondary">
                                 <span class="me-2 fw-semibold" th:text="${article.author}">Admin</span>
-                                <span th:text="${article.publishedAt}">10 Juni 2026</span>
+                                <span th:text="${article.publishedAt}">15 Juni 2026</span>
                             </div>
-                            <a href="#" class="btn btn-outline-primary btn-sm align-self-start mt-auto">Baca Selengkapnya</a>
+                            <a th:href="@{/artikel/{id}(id=${article.id})}" class="btn btn-outline-primary btn-sm align-self-start mt-auto">Baca Selengkapnya</a>
                         </div>
                     </article>
                 </div>
@@ -80,21 +79,21 @@
             <div class="p-3 bg-light rounded shadow-sm mb-3" th:if="${latestArticle != null}">
                 <h3 class="h6 fw-bold border-bottom pb-2 mb-2">Artikel Terkini</h3>
                 <div class="latest-item p-2 bg-white rounded border">
-                    <div class="small fw-semibold text-primary" th:text="${latestArticle.title}">Membuat Website Artikel Sederhana</div>
-                    <div class="text-muted extra-small" style="font-size: 0.75rem;" th:text="${latestArticle.publishedAt}">10 Juni 2026</div>
+                    <a th:href="@{/artikel/{id}(id=${latestArticle.id})}" class="small fw-semibold text-primary text-decoration-none" th:text="${latestArticle.title}">Membuat Website Artikel Sederhana</a>
+                    <div class="text-muted extra-small" style="font-size: 0.75rem;" th:text="${latestArticle.publishedAt}">15 Juni 2026</div>
                 </div>
             </div>
 
             <div class="p-3 bg-light rounded shadow-sm">
                 <h3 class="h6 fw-bold border-bottom pb-2 mb-2">Tentang Kami</h3>
-                <p class="mb-0 small text-muted">Arkan Tech hadir untuk membantu kamu memahami Spring Boot, Bootstrap, Java, dan praktik pengembangan web modern.</p>
+                <p class="mb-0 small text-muted"><span th:text="${webName}">Portal</span> hadir untuk membantu kamu memahami Spring Boot, Bootstrap, Java, dan praktik pengembangan web modern.</p>
             </div>
         </aside>
     </div>
 </main>
 
 <footer class="bg-dark text-white py-3 text-center small">
-    <div class="container">© 2026 Arkan Tech | Dibangun dengan Spring Boot & Bootstrap</div>
+    <div class="container">© 2026 <span th:text="${webName}">Portal</span> | Dibangun dengan Spring Boot & Bootstrap</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 

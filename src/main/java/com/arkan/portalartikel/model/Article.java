@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Column; // Tambahan untuk tipe data besar
 
 @Entity
 @Table(name = "articles")
@@ -20,20 +21,26 @@ public class Article {
     private String author;
     private String publishedAt;
 
-    // Constructor Kosong (Wajib untuk JPA/Hibernate)
+    // TAMBAHAN: Field untuk isi berita utuh. 
+    // @Column(columnDefinition = "TEXT") memastikan database bisa menampung teks yang sangat panjang.
+    @Column(columnDefinition = "TEXT")
+    private String content; 
+
+    // Constructor Kosong (Wajib untuk JPA)
     public Article() {
     }
 
-    // Constructor Lengkap (Untuk mempermudah instansiasi data)
-    public Article(String category, String title, String excerpt, String author, String publishedAt) {
+    // Constructor Lengkap Baru (Sudut pandang parameter memasukkan 'content')
+    public Article(String category, String title, String excerpt, String content, String author, String publishedAt) {
         this.category = category;
         this.title = title;
         this.excerpt = excerpt;
+        this.content = content;
         this.author = author;
         this.publishedAt = publishedAt;
     }
 
-    // Getter dan Setter (Wajib untuk Thymeleaf dan Operasi CRUD)
+    // Getter dan Setter
     public Long getId() { 
         return id; 
     }
@@ -64,6 +71,14 @@ public class Article {
     
     public void setExcerpt(String excerpt) { 
         this.excerpt = excerpt; 
+    }
+
+    public String getContent() { 
+        return content; 
+    }
+    
+    public void setContent(String content) { 
+        this.content = content; 
     }
 
     public String getAuthor() { 
