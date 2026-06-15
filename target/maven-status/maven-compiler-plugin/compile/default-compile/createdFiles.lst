@@ -1,0 +1,5 @@
+com\arkan\portalartikel\controller\HomeController.class
+com\arkan\portalartikel\model\Article.class
+com\arkan\portalartikel\PortalArtikelApplication.class
+com\arkan\portalartikel\service\ArticleService.class
+com\arkan\portalartikel\repository\ArticleRepository.class
