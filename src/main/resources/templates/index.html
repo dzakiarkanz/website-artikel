@@ -1,103 +1,79 @@
 <!doctype html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${webName} + ' | Portal Artikel'"></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
-          rel="stylesheet" 
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
-          crossorigin="anonymous">
+    <title th:text="${webName} + ' | Portal Berita Teknologi'"></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #212529; }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; }
+        .card-title { font-weight: 700; line-height: 1.4; }
+    </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark topbar" style="background-color: #1e1e24;">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand fw-bold" th:href="@{/}" th:text="${webName}">Portal</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3 fw-semibold text-uppercase small">
-                <li class="nav-item"><a class="nav-link active" th:href="@{/}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Tech</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Tutorials</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">AI & Dev</a></li>
-            </ul>
-            <form class="d-flex gap-2">
-                <input class="form-control form-control-sm search-input" type="search" placeholder="Cari Artikel..." aria-label="Cari">
-                <button class="btn btn-outline-light btn-sm px-3" type="submit">Login</button>
-            </form>
+        <a class="navbar-brand" th:href="@{/}" th:text="${webName}">Tech Pulse</a>
+        
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="ms-auto d-flex align-items-center gap-2">
+                
+                <div sec:authorize="isAnonymous()" class="d-flex gap-2">
+                    <a th:href="@{/login}" class="btn btn-outline-light btn-sm px-3">Masuk</a>
+                    <a th:href="@{/register}" class="btn btn-primary btn-sm px-3 fw-semibold">Daftar</a>
+                </div>
+
+                <div sec:authorize="hasAuthority('ROLE_PEMBACA')" class="d-flex align-items-center gap-3">
+                    <span class="text-white-50 small">Halo, <strong class="text-white" sec:authentication="name">User</strong></span>
+                    <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm px-3">Keluar</a>
+                </div>
+
+                <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="d-flex align-items-center gap-3">
+                    <span class="text-white-50 small">Mode: <strong class="text-warning">Admin</strong></span>
+                    <a th:href="@{/admin/artikel}" class="btn btn-warning btn-sm px-3 fw-semibold text-dark">Dashboard Admin</a>
+                    <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm px-3">Keluar</a>
+                </div>
+
+            </div>
         </div>
     </div>
 </nav>
 
-<header class="hero-section py-5 bg-light border-bottom">
-    <div class="container text-center">
-        <p class="eyebrow mb-2 text-muted text-uppercase fw-bold small">Portal inspirasi untuk developer dan pembelajar</p>
-        <h1 class="display-6 fw-black mb-3">JELAJAHI IDE & TEKNOLOGI TERKINI</h1>
-        <p class="lead mb-4">Tempat berbagi insight seputar coding, AI, dan digital development.</p>
-        <div class="d-flex flex-column flex-md-row justify-content-center gap-2 hero-actions">
-            <input class="form-control search-hero w-50 mx-auto" type="text" placeholder="Cari Artikel...">
-            <a class="btn btn-primary hero-btn" href="#featured">Lihat Artikel Terbaru</a>
+<div class="container py-5">
+    <div class="row mb-5 text-center text-md-start align-items-center py-4 bg-white rounded shadow-sm px-4">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold text-dark mb-2">Portal Berita Dunia Teknologi</h1>
+            <p class="lead text-muted mb-0">Menyajikan informasi terupdate seputar pemrograman, gadget, dan kecerdasan buatan.</p>
         </div>
     </div>
-</header>
 
-<main class="container py-5" id="featured">
-    <div class="row g-4 align-items-start">
-        <section class="col-lg-8">
-            <div class="row g-3">
-                <div class="col-md-6" th:each="article : ${featuredArticles}">
-                    <article class="card article-card h-100 border-0 shadow-sm">
-                        <div class="card-body d-flex flex-column">
-                            <span class="badge bg-primary category-badge mb-3 align-self-start" th:text="${article.category}">JAVA</span>
-                            <h2 class="card-title h5 fw-bold article-title" th:text="${article.title}">Judul Artikel</h2>
-                            <p class="card-text text-muted flex-grow-1 small" th:text="${article.excerpt}">Ringkasan artikel.</p>
-                            <div class="meta mb-3 small text-secondary">
-                                <span class="me-2 fw-semibold" th:text="${article.author}">Admin</span>
-                                <span th:text="${article.publishedAt}">15 Juni 2026</span>
-                            </div>
-                            <a th:href="@{/artikel/{id}(id=${article.id})}" class="btn btn-outline-primary btn-sm align-self-start mt-auto">Baca Selengkapnya</a>
-                        </div>
-                    </article>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div class="col" th:each="art : ${articles}">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body p-4 d-flex flex-column">
+                    <div class="mb-2">
+                        <span class="badge bg-secondary text-uppercase small" th:text="${art.category}">Kategori</span>
+                    </div>
+                    <h2 class="card-title h5 text-dark mb-3" th:text="${art.title}">Judul Berita Utama</h2>
+                    <p class="card-text text-muted small mb-4" th:text="${art.excerpt}">Ringkasan berita pendek...</p>
+                    <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+                        <span class="text-muted" style="font-size: 0.8rem;" th:text="${art.publishedAt}">Tanggal</span>
+                        <a th:href="@{/article/{id}(id=${art.id})}" class="btn btn-outline-primary btn-sm px-3 fw-semibold">Baca Selengkapnya</a>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <aside class="col-lg-4">
-            <div class="p-3 bg-light rounded shadow-sm mb-3">
-                <h3 class="h6 fw-bold border-bottom pb-2 mb-2">Kategori Populer</h3>
-                <ul class="list-unstyled mb-0">
-                    <li class="py-1 small" th:each="category : ${popularCategories}" th:text="${category}">Tech</li>
-                </ul>
-            </div>
-
-            <div class="p-3 bg-light rounded shadow-sm mb-3" th:if="${latestArticle != null}">
-                <h3 class="h6 fw-bold border-bottom pb-2 mb-2">Artikel Terkini</h3>
-                <div class="latest-item p-2 bg-white rounded border">
-                    <a th:href="@{/artikel/{id}(id=${latestArticle.id})}" class="small fw-semibold text-primary text-decoration-none" th:text="${latestArticle.title}">Membuat Website Artikel Sederhana</a>
-                    <div class="text-muted extra-small" style="font-size: 0.75rem;" th:text="${latestArticle.publishedAt}">15 Juni 2026</div>
-                </div>
-            </div>
-
-            <div class="p-3 bg-light rounded shadow-sm">
-                <h3 class="h6 fw-bold border-bottom pb-2 mb-2">Tentang Kami</h3>
-                <p class="mb-0 small text-muted"><span th:text="${webName}">Portal</span> hadir untuk membantu kamu memahami Spring Boot, Bootstrap, Java, dan praktik pengembangan web modern.</p>
-            </div>
-        </aside>
+        </div>
+        <div class="col-12 w-100 text-center py-5" th:if="${#lists.isEmpty(articles)}">
+            <p class="text-muted">Belum ada artikel yang diterbitkan.</p>
+        </div>
     </div>
-</main>
+</div>
 
-<footer class="bg-dark text-white py-3 text-center small">
-    <div class="container">© 2026 <span th:text="${webName}">Portal</span> | Dibangun dengan Spring Boot & Bootstrap</div>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
-        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

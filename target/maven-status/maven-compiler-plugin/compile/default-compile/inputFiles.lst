@@ -1,6 +1,15 @@
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\config\SecurityConfig.java
 C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\controller\AdminController.java
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\controller\AuthController.java
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\controller\CommentController.java
 C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\controller\HomeController.java
 C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\model\Article.java
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\model\Comment.java
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\model\User.java
 C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\PortalArtikelApplication.java
 C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\repository\ArticleRepository.java
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\repository\CommentRepository.java
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\repository\UserRepository.java
 C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\service\ArticleService.java
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\service\CommentService.java
+C:\Users\Ari\Documents\GitHub\website-artikel\src\main\java\com\arkan\portalartikel\service\CustomUserDetailsService.java
