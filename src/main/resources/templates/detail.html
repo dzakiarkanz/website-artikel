@@ -56,7 +56,7 @@
 
                 <div sec:authorize="isAuthenticated()" class="card border-0 comment-box p-4 mb-4">
                     <h3 class="h6 fw-bold mb-2">Tulis Komentar sebagai: <span class="text-primary" sec:authentication="name">NamaUser</span></h3>
-                    <form th:action="@{/article/{id}/comment(id=${article.id})}" method="post">
+                    <form th:action="@{/article/{articleId}/comment(articleId=${article.id})}" method="post">
                         <div class="mb-3">
                             <textarea class="form-control" name="content" rows="3" placeholder="Tulis pendapat Anda secara sopan di sini..." required></textarea>
                         </div>
@@ -74,10 +74,10 @@
                 <div class="comment-list">
                     <div th:each="com : ${comments}" class="border-bottom py-3">
                         <div class="d-flex justify-content-between align-items-center mb-1">
-                            <span class="fw-bold text-dark small" th:text="${com.user.username}">Nama Pengirim</span>
+                            <span class="fw-bold text-dark small" th:text="${com.username}">Nama Pengirim</span>
                             <span class="text-muted" style="font-size: 0.75rem;" th:text="${com.createdAt}">Tanggal Jam</span>
                         </div>
-                        <p class="text-secondary small mb-0" th:text="${com.content}">Isi teks komentar dari pembaca website.</p>
+                        <p class="text-secondary small mb-0" th:text="${com.content}">Isi teks komentar.</p>
                     </div>
 
                     <div th:if="${#lists.isEmpty(comments)}" class="text-center py-4 text-muted small">
@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </section>
-            </div>
+        </div>
     </div>
 </div>
 

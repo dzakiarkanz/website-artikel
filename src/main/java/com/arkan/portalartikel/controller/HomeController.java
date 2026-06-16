@@ -19,20 +19,15 @@ public class HomeController {
 
     private final String NAMA_WEB = "Tech Pulse";
 
-    // PERBAIKAN DI SINI: Pastikan mengambil data dari Service/Database
     @GetMapping("/")
     public String isiBeranda(Model model) {
         model.addAttribute("webName", NAMA_WEB);
-        
-        // JANGAN gunakan list manual lama. Ambil langsung dari database lewat service:
         model.addAttribute("articles", articleService.ambilSemuaArtikel());
-        
-        return "index"; // Mengarah ke templates/index.html
+        return "index";
     }
 
     @GetMapping("/article/{id}")
-    public String detailArtikel(@PathVariable("id") Long id, Model model) {
-        // ... (kode detailArtikel yang kemarin tetap sama) ...
+    public String detailArtikel(@PathVariable("id") String id, Model model) { 
         var article = articleService.ambilArtikelBerdasarkanId(id);
         if (article != null) {
             model.addAttribute("webName", NAMA_WEB);

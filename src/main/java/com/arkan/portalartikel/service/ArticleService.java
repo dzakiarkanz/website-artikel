@@ -1,71 +1,73 @@
 package com.arkan.portalartikel.service;
 
-import com.arkan.portalartikel.model.Article;
-import com.arkan.portalartikel.repository.ArticleRepository;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.arkan.portalartikel.model.Article;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.firebase.cloud.FirestoreClient;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ArticleService {
 
-    @Autowired
-    private ArticleRepository articleRepository;
-
-    // Pastikan di sini hanya ada 3 objek Article, masing-masing memiliki 6 argumen String (termasuk isi berita)
-    @PostConstruct
-    public void initData() {
-        if (articleRepository.count() == 0) {
-            articleRepository.saveAll(List.of(
-                new Article("JAVA", 
-                        "Panduan Lengkap Spring Boot Bootstrap",
-                        "Belajar memahami struktur aplikasi modern dengan Spring Boot, Bootstrap, dan template engine Thymeleaf.",
-                        "Spring Boot merupakan salah satu framework Java yang paling populer untuk mengembangkan aplikasi berbasis web dan RESTful API. Dalam panduan ini, kita membedah bagaimana integrasi Bootstrap sebagai front-end dan Thymeleaf sebagai template engine dapat mempercepat proses development. Arsitektur berlapis (Layered Architecture) yang memisahkan Model, Repository, Service, dan Controller menjamin kode Anda tetap rapi, mudah di-scale, dan maintainable dalam jangka panjang.",
-                        "Dzaki Arkan", "15 Juni 2026"),
-                
-                new Article("WEB DEV", 
-                        "Membuat Website Artikel Sederhana",
-                        "Implementasi CRUD sederhana untuk platform blog dengan Spring Boot Web dan Thymeleaf.",
-                        "Membuat website artikel atau blog merupakan proyek fundamental yang sangat bagus untuk memahami konsep dasar web development. Dengan memanfaatkan Spring Boot Web, kita bisa mengatur routing URL dengan mudah. Melalui pembahasan ini, Anda akan diajak mempraktikkan bagamana data dikirim dari Controller menuju halaman HTML menggunakan ekspresi Thymeleaf secara dinamis tanpa perlu menulis JavaScript yang rumit.",
-                        "Admin Tech", "15 Juni 2026"),
-                
-                new Article("AI", 
-                        "Pengantar Auto-Configuration di Spring",
-                        "Kenali cara kerja auto-configuration agar proyek lebih cepat dikembangkan.",
-                        "Salah satu keajaiban utama dari Spring Boot adalah fitur Auto-Configuration. Fitur ini secara cerdas mendeteksi library apa saja yang ada di dalam berkas pom.xml Anda dan langsung mengonfigurasinya secara otomatis. Sebagai contoh, ketika kita memasukkan dependensi H2 Database, Spring Boot langsung menyiapkan database in-memory siap pakai di latar belakang tanpa mengharuskan kita menulis baris kode konfigurasi bean database sama sekali.",
-                        "Dzaki Arkan", "15 Juni 2026")
-            ));
-        }
-    }
-
     public List<Article> ambilSemuaArtikel() {
-        return articleRepository.findAll();
-    }
-
-    public Article ambilArtikelTerbaru() {
-        List<Article> semua = articleRepository.findAll();
-        if (semua.isEmpty()) {
-            return null;
+        List<Article> articleList = new ArrayList<>();
+        try {
+            Firestore db = FirestoreClient.getFirestore();
+            QuerySnapshot querySnapshot = db.collection("articles").get().get();
+            
+            querySnapshot.getDocuments().forEach(document -> {
+                Article article = document.toObject(Article.class);
+                if (article != null) {
+                    article.setId(document.getId()); 
+                    articleList.add(article);
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("Gagal mengambil artikel: " + e.getMessage());
         }
-        return semua.get(semua.size() - 1);
+        return articleList;
     }
 
-    // Method ini wajib ada agar HomeController tidak error line 41
-    public Article ambilArtikelBerdasarkanId(Long id) {
-        Optional<Article> artikel = articleRepository.findById(id);
-        return artikel.orElse(null);
-    }
-
-    // TAMBAHAN 1: Fungsi untuk Menyimpan Artikel Baru atau Mengupdate Artikel Lama
     public void simpanArtikel(Article article) {
-        articleRepository.save(article);
+        try {
+            Firestore db = FirestoreClient.getFirestore();
+            if (article.getId() == null || article.getId().isEmpty()) {
+                db.collection("articles").add(article).get();
+            } else {
+                db.collection("articles").document(article.getId()).set(article).get();
+            }
+            System.out.println("Artikel berhasil diproses di Firebase!");
+        } catch (Exception e) {
+            System.err.println("Gagal memproses artikel: " + e.getMessage());
+        }
     }
 
-    // TAMBAHAN 2: Fungsi untuk Menghapus Artikel Berdasarkan ID
-    public void hapusArtikelBerdasarkanId(Long id) {
-        articleRepository.deleteById(id);
+    public Article ambilArtikelBerdasarkanId(String id) { 
+        try {
+            Firestore db = FirestoreClient.getFirestore();
+            DocumentSnapshot document = db.collection("articles").document(id).get().get();
+            if (document.exists()) {
+                Article article = document.toObject(Article.class);
+                if (article != null) {
+                    article.setId(document.getId());
+                    return article;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Gagal mengambil artikel: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void hapusArtikelBerdasarkanId(String id) { 
+        try {
+            Firestore db = FirestoreClient.getFirestore();
+            db.collection("articles").document(id).delete().get();
+        } catch (Exception e) {
+            System.err.println("Gagal menghapus artikel: " + e.getMessage());
+        }
     }
 }
