@@ -1,3 +1,4 @@
+com\arkan\portalartikel\controller\AdminController.class
 com\arkan\portalartikel\controller\HomeController.class
 com\arkan\portalartikel\model\Article.class
 com\arkan\portalartikel\PortalArtikelApplication.class

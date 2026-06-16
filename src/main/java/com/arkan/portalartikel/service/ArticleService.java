@@ -58,4 +58,14 @@ public class ArticleService {
         Optional<Article> artikel = articleRepository.findById(id);
         return artikel.orElse(null);
     }
+
+    // TAMBAHAN 1: Fungsi untuk Menyimpan Artikel Baru atau Mengupdate Artikel Lama
+    public void simpanArtikel(Article article) {
+        articleRepository.save(article);
+    }
+
+    // TAMBAHAN 2: Fungsi untuk Menghapus Artikel Berdasarkan ID
+    public void hapusArtikelBerdasarkanId(Long id) {
+        articleRepository.deleteById(id);
+    }
 }
